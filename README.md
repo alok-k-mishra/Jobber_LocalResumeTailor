@@ -26,6 +26,9 @@ anti-hallucination checks so every claim is backed by your actual resume.
 5. **Tailoring** — Phi-4-mini rewrites your summary and resume bullets
    (Markdown, one-page friendly) and generates a custom cover letter. Every
    generated claim is validated against your real evidence (see Truthfulness).
+6. **Learns with every analysis** — completed analyses are stored and
+   re-injected into future prompts (in-context learning), so the app's output
+   sharpens the more you use it. No model weights are touched.
 
 ## Pipeline
 
@@ -66,7 +69,7 @@ vars `OLLAMA_EXTRACTION_MODEL`, `OLLAMA_REASONING_MODEL`, and
 installed, the app auto-resolves to a close installed tag and reports the change
 in the UI with a `*`.
 
-**Recommended combo** (what I personally use and test with):
+I personally use the following models since I have a GPU with **6 GB VRAM**:
 
 | Variable                  | Model              | Notes |
 |---------------------------|--------------------|-------|
@@ -74,15 +77,27 @@ in the UI with a `*`.
 | `OLLAMA_REASONING_MODEL`  | `phi4-mini:3.8b`   | Reasoning, matching, tailoring, cover letters. |
 | `OLLAMA_VALIDATION_MODEL` | `qwen3.5:4b`       | Reuses the extraction model. |
 
-If those exact tags aren't available, any recent Qwen or Phi variant works —
-e.g. `qwen3:4b` or `phi4-mini:3.8b`. Heavier tags (larger parameter count)
-generally give sharper results on slower hardware.
+If you have a more powerful GPU (larger VRAM), you can pick models with higher
+parameter counts for sharper results — but do your research first. In general:
+
+- **Extraction** (`OLLAMA_EXTRACTION_MODEL`) — an instruction-tuned model that
+  is good at turning raw text into structured output, e.g. recent **Qwen**
+  variants.
+- **Reasoning** (`OLLAMA_REASONING_MODEL`) — a model with strong reasoning and
+  instruction following for matching and tailoring, e.g. recent **Phi** or
+  **Qwen** variants.
+- **Validation** (`OLLAMA_VALIDATION_MODEL`) — a capable model for judging
+  semantic scope; reusing your extraction model usually works fine.
+
+Check each model's context window, quality benchmarks, and VRAM requirements
+(e.g. on [Ollama's library](https://ollama.com/library)) before pulling something
+heavier than your hardware can handle comfortably.
 
 ## Setup
 
 ### 1. Install and start Ollama
 
-Install Ollama from <https://ollama.com>, then pull the recommended models:
+Install Ollama from <https://ollama.com>, then pull the models I use:
 
 ```sh
 ollama pull qwen3.5:4b
