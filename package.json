@@ -1,0 +1,25 @@
+{
+  "name": "local-resume-tailor",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Privacy-first, evidence-based resume tailoring assistant powered entirely by local Ollama models.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "smoke": "node scripts/smoke.js",
+    "test": "node scripts/test-validation.js && node scripts/test-matching.js",
+    "test:matching": "node scripts/test-matching.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mammoth": "^1.9.0",
+    "multer": "^2.0.2",
+    "pdfjs-dist": "^4.10.38",
+    "zod": "^3.24.1"
+  }
+}

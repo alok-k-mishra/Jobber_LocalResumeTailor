@@ -1,0 +1,22 @@
+Junior Data Analyst - Growth Team
+
+We are looking for a Junior Data Analyst to join our growth team. You will build dashboards, analyse customer behaviour, and support the marketing team with data.
+
+Required qualifications:
+- 2+ years of professional experience in a data analyst role
+- Strong experience with SQL and relational databases
+- Experience developing dashboards using React or a similar frontend framework
+- Proficiency with Excel, including PivotTables
+- Experience with data visualisation tools such as Tableau
+
+Preferred qualifications:
+- Experience with Python for data analysis
+- Experience with ETL pipelines
+- Excellent communication and stakeholder presentation skills
+- Experience working in cross-functional teams
+
+Responsibilities:
+- Build and maintain dashboards for the marketing team
+- Write SQL queries to extract and transform data
+- Present findings to stakeholders
+- Collaborate with engineering and marketing

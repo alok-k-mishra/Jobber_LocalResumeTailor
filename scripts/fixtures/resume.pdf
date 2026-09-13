@@ -1,0 +1,60 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 1275 >>
+stream
+BT /F1 11 Tf 72 720 Td 14 TL
+(JANE DOE) Tj T*
+(jane.doe@example.com | +1 555 0100 | Bengaluru, India) Tj T*
+(github.com/janedoe) Tj T*
+(SUMMARY) Tj T*
+(Final-year Computer Science student interested in data and web development.) Tj T*
+(SKILLS) Tj T*
+(Languages: JavaScript, Python, Java, SQL, HTML, CSS) Tj T*
+(Frameworks: React, Node.js, Express) Tj T*
+(Databases: MySQL, MongoDB) Tj T*
+(Tools: Git, Excel, Tableau) Tj T*
+(EXPERIENCE) Tj T*
+(Data Intern, Acme Analytics \(Jun 2024 - Aug 2024\)) Tj T*
+(- Cleaned and formatted monthly sales data in Excel for reporting.) Tj T*
+(- Wrote basic SQL queries to pull order records for the reporting team.) Tj T*
+(- Attended weekly team standups with 5 members.) Tj T*
+(PROJECTS) Tj T*
+(Vedic Wars \(College project, 2024\)) Tj T*
+(- Built an admin panel using React for a browser game.) Tj T*
+(- Used MySQL to store player scores.) Tj T*
+(- Worked in a team of 4 students.) Tj T*
+(Airbnb Listings Analysis \(Coursework, 2023\)) Tj T*
+(- Used Tableau to visualise listing prices for a course assignment.) Tj T*
+(- Presented findings to the class.) Tj T*
+(EDUCATION) Tj T*
+(B.Tech in Computer Science, Example Institute of Technology, 2021 - 2025) Tj T*
+(CERTIFICATIONS) Tj T*
+(- Google Data Analytics Certificate \(2023\)) Tj T*
+ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000311 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1638
+%%EOF

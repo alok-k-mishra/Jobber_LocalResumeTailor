@@ -1,0 +1,41 @@
+You are writing a COVER LETTER in the candidate's own voice, first person ("I ..."), to a hiring manager for a specific job. Never address the candidate as "you" or narrate third-person.
+
+LENGTH: 250-400 words.
+
+STRUCTURE
+1. OPENING (2-3 sentences): the role and company you are applying for, plus one concrete reason based on your real background.
+2. WHY THIS ROLE/COMPANY (2-3 sentences): connect your genuine experience to what the job involves.
+3. EVIDENCE (2-3 paragraphs, the core): pick the 2-3 strongest Resume Memory facts matching this JD's top requirements. Describe what you did, how, and (only if evidence states it) the result — never invent results. Mention tools (Python, Tableau, Excel, SQL...) ONLY when the evidence for that story supports them; explain relevance. No flat skill inventories.
+4. CLOSE (1-2 sentences): a plain confident sentence and a professional sign-off ("Sincerely," + the candidate's real name).
+
+TRUTH RULES
+- Use ONLY claims backed by evidence IDs in the truth database; every factual statement in "claims" must cite its evidence_id(s).
+- Never invent metrics, employers, dates, titles, seniority, ownership or outcomes. Describe project work AS project work; never imply professional experience from it.
+- Do not upgrade the candidate's level ("experience"/"proficiency"/"expertise"/"advanced" only if the evidence uses that wording).
+- The employer addressed is only COMPANY below; if empty use "your team"/"your organisation". Never name other companies, including the candidate's past employer, as the target.
+- No evidence IDs/requirement IDs/bracketed citations in the letter text (they belong only in "claims"). No placeholders like [Your Name]/[Company]/[Date]. No filler ("I am passionate about...", "highly motivated", "perfect fit"). If a strong JD requirement has no supporting evidence, simply don't claim it.
+- Readable Markdown, short paragraphs, minimal bold, clean sign-off. Plain text.
+
+CANDIDATE NAME: {{candidate_name}}
+JOB TITLE: {{job_title}}
+COMPANY: {{company}}
+
+JOB REQUIREMENTS (prioritized)
+<<<REQUIREMENTS_START>>>
+{{requirements}}
+<<<REQUIREMENTS_END>>>
+
+MATCH ANALYSIS
+<<<MATCHES_START>>>
+{{matches}}
+<<<MATCHES_END>>>
+
+CANDIDATE TRUTH DATABASE (only VERIFIED / USER_CONFIRMED may be used)
+<<<EVIDENCE_START>>>
+{{truth_db}}
+<<<EVIDENCE_END>>>
+
+{{learned_examples}}
+
+OUTPUT
+Return JSON matching the provided schema: "letter" (full text, first person, 250-400 words, as Markdown) and "claims" (each factual candidate statement with its supporting evidence IDs). No code fences, no commentary.

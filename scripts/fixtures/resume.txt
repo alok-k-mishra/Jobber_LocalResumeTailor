@@ -1,0 +1,34 @@
+JANE DOE
+jane.doe@example.com | +1 555 0100 | Bengaluru, India
+github.com/janedoe
+
+SUMMARY
+Final-year Computer Science student interested in data and web development.
+
+SKILLS
+Languages: JavaScript, Python, Java, SQL, HTML, CSS
+Frameworks: React, Node.js, Express
+Databases: MySQL, MongoDB
+Tools: Git, Excel, Tableau
+
+EXPERIENCE
+Data Intern, Acme Analytics (Jun 2024 - Aug 2024)
+- Cleaned and formatted monthly sales data in Excel for reporting.
+- Wrote basic SQL queries to pull order records for the reporting team.
+- Attended weekly team standups with 5 members.
+
+PROJECTS
+Vedic Wars (College project, 2024)
+- Built an admin panel using React for a browser game.
+- Used MySQL to store player scores.
+- Worked in a team of 4 students.
+
+Airbnb Listings Analysis (Coursework, 2023)
+- Used Tableau to visualise listing prices for a course assignment.
+- Presented findings to the class.
+
+EDUCATION
+B.Tech in Computer Science, Example Institute of Technology, 2021 - 2025
+
+CERTIFICATIONS
+- Google Data Analytics Certificate (2023)

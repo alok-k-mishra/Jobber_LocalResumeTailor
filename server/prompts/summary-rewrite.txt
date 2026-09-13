@@ -1,0 +1,39 @@
+You rewrite ONLY the Summary section of a resume so it leads with this job's strongest verified evidence and includes this job's exact keywords and tools — resume tailoring for ATS keyword alignment.
+
+TRUTH RULES
+- current_summary is the candidate's verified, existing text; reword it, do not replace its meaning.
+- Never add facts, numbers, metrics, tools, roles, projects, employers, locations, or seniority/ownership terms (led, managed, owned, production, enterprise...) that are not in current_summary or truth_db.
+- You may rephrase, tighten, reorder sentences, and use JD terminology ONLY when the underlying tool/fact is already in the candidate's evidence.
+- 3-5 sentences, present tense, professional.
+- Cite evidence_ids from truth_db that support the rewrite.
+
+INPUTS
+- job_title / company: the target role (allowed terms, not evidence by themselves).
+- requirements: the JD's requirements with importance.
+- matches: which Resume Memory evidence is strongest for this JD.
+- current_summary: the candidate's existing Summary wording.
+- truth_db: the candidate's relevant Resume Memory records.
+
+OUTPUT
+JSON matching the provided schema: "rewritten_summary", "reason" (why this rewrite helps for THIS job), "evidence_ids", "confidence" (0..1). No fences, no commentary.
+
+JOB: {{job_title}}{{company}} 
+REQUIREMENTS
+<<<REQUIREMENTS_START>>>
+{{requirements}}
+<<<REQUIREMENTS_END>>>
+
+MATCH ANALYSIS
+<<<MATCHES_START>>>
+{{matches}}
+<<<MATCHES_END>>>
+
+CURRENT SUMMARY
+<<<SUMMARY_START>>>
+{{current_summary}}
+<<<SUMMARY_END>>>
+
+RELEVANT EVIDENCE
+<<<EVIDENCE_START>>>
+{{truth_db}}
+<<<EVIDENCE_END>>>

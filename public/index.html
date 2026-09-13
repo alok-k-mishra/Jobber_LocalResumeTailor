@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Resume Memory — Local Resume Tailor</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo-dot" aria-hidden="true"></span>
+        <div>
+          <h1>RESUME MEMORY</h1>
+          <p class="tagline">Your Personal Tailor. 100% Local</p>
+        </div>
+      </div>
+      <div id="status" class="status" aria-live="polite"></div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <button class="side-item" id="nav-memory" type="button" data-view="memory">
+          <span class="side-name">Resume Memory</span>
+        </button>
+        <button class="side-item" id="nav-questions" type="button" data-view="questions">
+          <span class="side-name">Personal Questions</span>
+        </button>
+
+        <div class="side-heading">Applications</div>
+        <button class="side-new" id="new-app-btn" type="button">+ New application</button>
+        <div id="app-list" class="app-list"></div>
+      </aside>
+
+      <main class="workspace">
+        <!-- RESUME MEMORY VIEW -->
+        <section id="view-memory" class="view"></section>
+
+        <!-- PERSONAL QUESTIONS VIEW -->
+        <section id="view-questions" class="view hidden"></section>
+
+        <!-- APPLICATION WORKSPACE VIEW -->
+        <section id="view-app" class="view hidden">
+          <div id="app-header" class="card"></div>
+          <div id="app-tabs" class="app-tabs hidden"></div>
+          <div id="panel-job" class="panel hidden"></div>
+          <div id="panel-overview" class="panel hidden"></div>
+          <div id="panel-questions" class="panel hidden"></div>
+          <div id="panel-match" class="panel hidden"></div>
+          <div id="panel-tailoring" class="panel hidden"></div>
+          <div id="panel-cover" class="panel hidden"></div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Evidence inspect drawer -->
+    <div id="drawer-backdrop" class="backdrop hidden"></div>
+    <aside id="drawer" class="drawer hidden" aria-live="polite">
+      <button class="drawer-close" id="drawer-close" type="button">&times;</button>
+      <div id="drawer-body"></div>
+    </aside>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
