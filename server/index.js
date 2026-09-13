@@ -97,7 +97,7 @@ app.get(
   asyncRoute(async (_req, res) => {
     await detectOllama();
     res.json({
-      app: "Local Resume Tailor",
+      app: "Jobber",
       privacy: "All processing is local. No data leaves this machine.",
       ollama: statusSnapshot(),
     });
@@ -777,7 +777,7 @@ async function start() {
   const snap = statusSnapshot();
   app.listen(config.port, () => {
     // eslint-disable-next-line no-console
-    console.log(`Local Resume Tailor running at http://localhost:${config.port}`);
+    console.log(`Jobber running at http://localhost:${config.port}`);
     if (snap.available) {
       console.log(`Ollama: ${snap.baseUrl}`);
       console.log(`Models: ${snap.models.join(", ")}`);

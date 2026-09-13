@@ -1,4 +1,4 @@
-# Jobber — Local Resume Tailor
+# Jobber 🔥 — Local Resume Tailor
 
 A privacy-first, evidence-based **resume tailoring assistant**. Everything runs
 fully locally through [Ollama](https://ollama.com) — no resume, job description,
@@ -56,22 +56,41 @@ Anti-hallucination is enforced in layers and never relies on a single model:
 ## Requirements
 
 - **Node.js >= 20**
-- **Ollama** installed and running with the models below
+- **Ollama** installed and running with at least one LLM model
+
+## Models
+
+The app is model-agnostic — you can use **any Ollama models** you want. The env
+vars `OLLAMA_EXTRACTION_MODEL`, `OLLAMA_REASONING_MODEL`, and
+`OLLAMA_VALIDATION_MODEL` are completely configurable; if the exact tag is not
+installed, the app auto-resolves to a close installed tag and reports the change
+in the UI with a `*`.
+
+**Recommended combo** (what I personally use and test with):
+
+| Variable                  | Model              | Notes |
+|---------------------------|--------------------|-------|
+| `OLLAMA_EXTRACTION_MODEL` | `qwen3.5:4b`       | Strong extraction, structured facts, and final validation. |
+| `OLLAMA_REASONING_MODEL`  | `phi4-mini:3.8b`   | Reasoning, matching, tailoring, cover letters. |
+| `OLLAMA_VALIDATION_MODEL` | `qwen3.5:4b`       | Reuses the extraction model. |
+
+If those exact tags aren't available, any recent Qwen or Phi variant works —
+e.g. `qwen3:4b` or `phi4-mini:3.8b`. Heavier tags (larger parameter count)
+generally give sharper results on slower hardware.
 
 ## Setup
 
 ### 1. Install and start Ollama
 
-Install Ollama from <https://ollama.com>, then pull the two models:
+Install Ollama from <https://ollama.com>, then pull the recommended models:
 
 ```sh
 ollama pull qwen3.5:4b
 ollama pull phi4-mini:3.8b
 ```
 
-Replace the tag with whatever is available for your hardware (e.g. `qwen3:4b` or
-`phi4-mini:3.8b` — the app auto-resolves to an installed tag close to the
-configured one and reports the change in the UI with a `*`).
+Want to use something different instead? Just `ollama pull <your-model>` and set
+the matching env vars — no code changes needed.
 
 ### 2. Configure the environment
 

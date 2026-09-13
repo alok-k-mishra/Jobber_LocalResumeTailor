@@ -1,8 +1,8 @@
 {
-  "name": "local-resume-tailor",
+  "name": "jobber",
   "version": "0.1.0",
   "private": true,
-  "description": "Privacy-first, evidence-based resume tailoring assistant powered entirely by local Ollama models.",
+  "description": "Jobber — privacy-first, evidence-based resume tailoring assistant powered entirely by local Ollama models.",
   "type": "module",
   "engines": {
     "node": ">=20"

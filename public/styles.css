@@ -72,10 +72,10 @@ input:focus, textarea:focus, select:focus {
 }
 
 .brand { display: flex; align-items: center; gap: 12px; }
-.logo-dot {
-  width: 14px; height: 14px; border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.15);
+.logo-fire {
+  font-size: 22px;
+  line-height: 1;
+  filter: drop-shadow(0 0 6px rgba(249, 115, 22, 0.5));
 }
 .topbar h1 { font-size: 15px; letter-spacing: 2.5px; margin: 0; }
 .tagline { margin: 2px 0 0; color: var(--muted); font-size: 12.5px; }
