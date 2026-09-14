@@ -1,6 +1,8 @@
 import express from "express";
 import multer from "multer";
+import fs from "node:fs";
 import path from "node:path";
+import { spawn } from "node:child_process";
 import { config, detectOllama, statusSnapshot, ROOT } from "./config.js";
 import {
   createSession,
@@ -748,6 +750,214 @@ app.get("/api/sessions/:id/evidence/:evidenceId", requireSession, (req, res) => 
 });
 
 // ---------------------------------------------------------------------------
+// First-run setup (active only when no .env file exists)
+// ---------------------------------------------------------------------------
+
+const ENV_FILE = path.join(ROOT, ".env");
+
+function envMissing() {
+  return !fs.existsSync(ENV_FILE);
+}
+
+function normalizeUrl(raw) {
+  let u = String(raw || "").trim().replace(/\/+$/, "");
+  if (!/^https?:\/\//i.test(u)) u = `http://${u}`;
+  return u;
+}
+
+function validUrl(u) {
+  try {
+    const parsed = new URL(u);
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function persistentPidPath() {
+  return path.join(ROOT, ".jobber-server.pid");
+}
+
+/**
+ * Spawn a fresh, detached copy of ourselves (so the newly written .env is
+ * loaded), hand the launcher the new pid, then exit. The frontend shows a
+ * countdown while this happens.
+ */
+function restartServer() {
+  const serverEntry = path.join(ROOT, "server", "index.js");
+  const child = spawn(process.execPath, [serverEntry], {
+    detached: true,
+    stdio: "inherit",
+    env: process.env,
+  });
+  try {
+    fs.writeFileSync(persistentPidPath(), String(child.pid || ""), "utf8");
+  } catch {
+    /* best-effort: the launcher can still restart manually */
+  }
+  child.unref();
+  process.exit(0);
+}
+
+function guardSetup(req, res) {
+  if (!envMissing()) {
+    res
+      .status(409)
+      .json({ error: "Jobber is already configured. Delete .env to reconfigure." });
+    return false;
+  }
+  return true;
+}
+
+const ROLE_META = {
+  extraction: {
+    label: "Extraction",
+    description:
+      "Turns resumes, job descriptions and answers into structured facts; also runs the final claim validation.",
+  },
+  reasoning: {
+    label: "Reasoning",
+    description:
+      "Requirement analysis, evidence matching, resume tailoring and cover letters.",
+  },
+  validation: {
+    label: "Validation",
+    description:
+      "Final claim-validation pass; reusing the extraction model usually works fine.",
+  },
+};
+
+const RECOMMENDED_MODELS = Object.fromEntries(
+  Object.entries(config.desiredModels).map(([task, model]) => [
+    task,
+    { model, ...(ROLE_META[task] || { label: task, description: "" }) },
+  ])
+);
+
+app.get("/api/setup/status", (req, res) => {
+  res.json({
+    setupMode: envMissing(),
+    port: config.port,
+    defaultOllamaUrl: "http://localhost:11434",
+    recommended: RECOMMENDED_MODELS,
+  });
+});
+
+app.post("/api/setup/probe", asyncRoute(async (req, res) => {
+  if (!guardSetup(req, res)) return;
+  let url;
+  try {
+    url = normalizeUrl(req.body?.url || "http://localhost:11434");
+    if (!validUrl(url)) throw new Error("bad url");
+  } catch {
+    return res
+      .status(400)
+      .json({ ok: false, error: "Please enter a valid URL like http://localhost:11434" });
+  }
+  const controller = new AbortController();
+  const t = setTimeout(() => controller.abort(), 8000);
+  try {
+    const versionRes = await fetch(`${url}/api/version`, { signal: controller.signal });
+    const data = versionRes.ok ? await versionRes.json() : {};
+    const tagsRes = await fetch(`${url}/api/tags`, { signal: controller.signal });
+    const tags = tagsRes.ok ? await tagsRes.json() : {};
+    res.json({
+      ok: true,
+      url,
+      version: data.version || null,
+      modelCount: Array.isArray(tags.models) ? tags.models.length : 0,
+    });
+  } catch (err) {
+    res.status(502).json({
+      ok: false,
+      url,
+      error: `Could not reach Ollama at ${url}: ${err.cause?.message || err.message}`,
+    });
+  } finally {
+    clearTimeout(t);
+  }
+}));
+
+app.post("/api/setup/models", asyncRoute(async (req, res) => {
+  if (!guardSetup(req, res)) return;
+  const url = normalizeUrl(req.body?.url || "");
+  if (!validUrl(url)) {
+    return res.status(400).json({ ok: false, error: "Invalid Ollama URL." });
+  }
+  const controller = new AbortController();
+  const t = setTimeout(() => controller.abort(), 15000);
+  try {
+    const tagsRes = await fetch(`${url}/api/tags`, { signal: controller.signal });
+    if (!tagsRes.ok) throw new Error(`HTTP ${tagsRes.status}`);
+    const json = await tagsRes.json();
+    const models = (Array.isArray(json.models) ? json.models : []).map((m) => ({
+      name: m.name,
+      size: m.size || 0,
+      family: m.details?.family || "",
+      parameterSize: m.details?.parameter_size || "",
+      quant: m.details?.quantization_level || "",
+    }));
+    res.json({ ok: true, url, models });
+  } catch (err) {
+    res.status(502).json({
+      ok: false,
+      error: `Failed to list models: ${err.cause?.message || err.message}`,
+    });
+  } finally {
+    clearTimeout(t);
+  }
+}));
+
+app.post("/api/setup/save", asyncRoute(async (req, res) => {
+  if (!guardSetup(req, res)) return;
+  const body = req.body || {};
+  const url = normalizeUrl(body.url || "");
+  const extraction = String(body.extraction || "").trim();
+  const reasoning = String(body.reasoning || "").trim();
+  const validation = String(body.validation || "").trim();
+  const port = Number(body.port ?? 5173);
+
+  if (!validUrl(url)) return res.status(400).json({ ok: false, error: "Invalid Ollama URL." });
+  if (!extraction || !reasoning || !validation) {
+    return res.status(400).json({ ok: false, error: "Pick a model for each role." });
+  }
+  if (!Number.isInteger(port) || port < 1 || port > 65535) {
+    return res.status(400).json({ ok: false, error: "Invalid port." });
+  }
+
+  const lines = [
+    "# Jobber - generated by the first-run wizard.",
+    `OLLAMA_BASE_URL=${url}`,
+    `OLLAMA_EXTRACTION_MODEL=${extraction}`,
+    `OLLAMA_REASONING_MODEL=${reasoning}`,
+    `OLLAMA_VALIDATION_MODEL=${validation}`,
+    `PORT=${port}`,
+    "DATA_DIR=./data/sessions",
+    "MAX_UPLOAD_MB=15",
+    "OLLAMA_TIMEOUT_MS=300000",
+  ];
+
+  try {
+    fs.writeFileSync(ENV_FILE, lines.join("\n") + "\n", { encoding: "utf8", flag: "w" });
+  } catch (err) {
+    return res.status(500).json({ ok: false, error: `Could not write .env: ${err.message}` });
+  }
+
+  res.json({
+    ok: true,
+    restartIn: 3000,
+    message: "Settings saved. Restarting to apply them…",
+  });
+
+  setTimeout(restartServer, 3000);
+}));
+
+app.get("/", (req, res, next) => {
+  if (envMissing()) return res.sendFile(path.join(ROOT, "public", "setup.html"));
+  next();
+});
+
+// ---------------------------------------------------------------------------
 // Static UI
 // ---------------------------------------------------------------------------
 
@@ -772,10 +982,37 @@ app.use((err, _req, res, _next) => {
   res.status(status).json({ error: message });
 });
 
+function listenWithRetry(onListening, remaining = 5) {
+  const server = app.listen(config.port);
+  server.on("listening", onListening);
+  const giveUp = (err) => {
+    // eslint-disable-next-line no-console
+    console.error(`Could not bind port ${config.port}: ${err.message}`);
+    process.exitCode = 1;
+  };
+  server.on("error", (err) => {
+    // A self-restart briefly overlaps the old process' port; retry a few times.
+    if (err.code === "EADDRINUSE" && remaining > 0) {
+      setTimeout(() => listenWithRetry(onListening, remaining - 1), 400);
+    } else {
+      giveUp(err);
+    }
+  });
+}
+
 async function start() {
+  if (envMissing()) {
+    listenWithRetry(() => {
+      // eslint-disable-next-line no-console
+      console.log(`Jobber is in first-run setup mode at http://localhost:${config.port}`);
+      console.log("No .env found - complete the setup wizard to generate one.");
+    });
+    return;
+  }
+
   await detectOllama();
   const snap = statusSnapshot();
-  app.listen(config.port, () => {
+  listenWithRetry(() => {
     // eslint-disable-next-line no-console
     console.log(`Jobber running at http://localhost:${config.port}`);
     if (snap.available) {

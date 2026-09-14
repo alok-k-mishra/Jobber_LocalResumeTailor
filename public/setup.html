@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jobber — First-run Setup</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/setup.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo-fire" aria-hidden="true">🔥</span>
+        <div>
+          <h1>JOBBER</h1>
+          <p class="tagline">First-run setup · all local, nothing leaves your machine</p>
+        </div>
+      </div>
+      <div class="status">
+        <span id="setup-badge" class="pill">unconfigured</span>
+      </div>
+    </header>
+
+    <main class="setup-wrap">
+      <p class="setup-intro">
+        Jobber talks to a local <strong>Ollama</strong> server; no cloud models are ever used.
+        If you haven't installed Ollama yet, grab it from
+        <a href="https://ollama.com" target="_blank" rel="noreferrer">ollama.com</a>, start it, then
+        continue below.
+      </p>
+
+      <!-- STEP 1 : connect -->
+      <section class="setup-step">
+        <h2><span class="step-no">1</span> Connect to Ollama</h2>
+        <div class="step-body">
+          <div class="field-row">
+            <label class="field">
+              <span class="field-label">Ollama server URL</span>
+              <input id="ollama-url" type="text" value="http://localhost:11434" spellcheck="false" />
+            </label>
+            <button id="btn-test" class="btn primary" type="button">Test connection</button>
+          </div>
+          <div class="url-info">
+            <p>
+              <strong>Default: <span class="mono">http://localhost:11434</span></strong> — this is
+              only correct when Ollama runs on the very same machine.
+            </p>
+            <p>
+              If Ollama lives on another machine (e.g. the Windows host while you're in WSL), point
+              the URL there instead: <span class="mono">http://&lt;that-ip&gt;:11434</span>
+            </p>
+            <p class="how-to-find">
+              How to find the address:
+              <span class="mono">ip route | grep default</span>
+              <span class="sep">·</span>
+              <span class="mono">ipconfig</span> (Windows)
+              <span class="sep">·</span>
+              <span class="mono">ip addr</span> / <span class="mono">ifconfig</span> (Linux / macOS)
+            </p>
+          </div>
+          <div id="connect-status" class="inline-status" aria-live="polite"></div>
+          <div id="connect-actions" class="connect-actions hidden">
+            <button id="btn-refresh" class="btn" type="button">↻ Refresh models</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2 : models -->
+      <section id="step-models" class="setup-step" hidden>
+        <h2><span class="step-no">2</span> Assign models</h2>
+        <div class="step-body">
+          <p class="hint">
+            Jobber never downloads anything — you install the models yourself first, e.g.
+            <code>ollama pull qwen3.5:4b</code>. Below you'll pick which installed model handles
+            each role; nothing is pre-selected for you.
+          </p>
+          <div class="model-guide">
+            <div><strong>Extraction</strong> — an instruction-tuned model that turns raw text into
+              structured facts. Recent <em>Qwen</em> variants are a safe bet.</div>
+            <div><strong>Reasoning</strong> — needs strong reasoning and instruction-following for
+              matching and tailoring. Recent <em>Phi</em> or <em>Qwen</em> variants.</div>
+            <div><strong>Validation</strong> — judges the final claims. Reusing your extraction
+              model usually works fine.</div>
+            <p class="guide-note">
+              In general, <strong>higher parameter counts give sharper results</strong> but need
+              proportionally more VRAM. The recommended picks (≈4B) run comfortably on ~6 GB VRAM;
+              only go bigger if your GPU allows.
+            </p>
+          </div>
+          <div id="role-list"></div>
+          <div id="models-status" class="inline-status" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- STEP 3 : finish -->
+      <section id="step-finish" class="setup-step" hidden>
+        <h2><span class="step-no">3</span> Finish</h2>
+        <div class="step-body">
+          <div class="field-row">
+            <label class="field port-field">
+              <span class="field-label">Server port</span>
+              <input id="setup-port" type="number" min="1" max="65535" value="5173" />
+            </label>
+            <button id="btn-save" class="btn primary" type="button">Save &amp; finish</button>
+          </div>
+          <div id="save-status" class="inline-status" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <div id="done-card" class="setup-step" hidden>
+        <h2>Configuration saved</h2>
+        <div class="step-body">
+          <p>
+            Your <code>.env</code> was written. Restarting in
+            <span id="restart-count" class="countdown">3</span> seconds…
+          </p>
+          <p class="guide-note">
+            If the app doesn't come back automatically, press <kbd>R</kbd> in the launcher.
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <script src="/setup.js"></script>
+  </body>
+</html>

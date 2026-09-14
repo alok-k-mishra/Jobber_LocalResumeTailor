@@ -104,23 +104,60 @@ ollama pull qwen3.5:4b
 ollama pull phi4-mini:3.8b
 ```
 
-Want to use something different instead? Just `ollama pull <your-model>` and set
-the matching env vars — no code changes needed.
+Want to use something different instead? Just `ollama pull <your-model>` — the
+app never pulls models for you; you decide what's installed. The setup wizard
+(see below) then lists exactly the models you have.
 
-### 2. Configure the environment
+### 2. Start the app
 
-Copy the example env file and adjust:
+**Option A — one-click launcher (recommended).** Run the launcher for your OS:
 
-```sh
-cp .env.example .env
-```
+| Platform             | Command                          |
+|----------------------|----------------------------------|
+| Linux / WSL          | `./start.sh`                     |
+| macOS                | `./start-macos.sh`               |
+| Windows (PowerShell) | `.\start.ps1`                    |
 
-### 3. Install & run
+It prints the banner and a menu:
+
+- `R` — restart the server
+- `O` — open the app in your browser
+- `L` — show recent server logs
+- `I` — (re)install dependencies
+- `Q` — stop the server and quit
+
+**Option B — plain install & run:**
 
 ```sh
 npm install
 npm start        # http://localhost:5173
 npm run dev      # watch mode (restarts on changes)
+```
+
+### First-run setup wizard
+
+If the app finds no `.env`, it boots into **first-run setup mode** and serves a
+wizard instead of the UI (the launcher opens it in your browser automatically):
+
+1. **Ollama URL** — enter your Ollama address (default
+   `http://localhost:11434`; the wizard tests the connection and shows Ollama's
+   version). In WSL, Ollama usually runs on the Windows host at the default
+   gateway IP — find it with `ip route | grep default` (Linux/WSL) or `ipconfig`
+   (Windows).
+2. **Models** — pick one installed model per role (extraction, reasoning,
+   validation). The list comes live from your Ollama; nothing is auto-selected.
+3. **Finish** — choose the port and save. The `.env` is written and the app
+   **restarts automatically** after a 3-second countdown with the new settings.
+
+To reconfigure later, delete `.env` and restart the app — the wizard runs again.
+
+### Manual configuration (optional)
+
+Instead of the wizard you can write `.env` yourself — copy the example and
+adjust:
+
+```sh
+cp .env.example .env
 ```
 
 ## Environment variables
@@ -155,6 +192,10 @@ npm run smoke    # full end-to-end pipeline against scripts/fixtures
 | Method | Path | Purpose |
 |--------|------|---------|
 | GET    | `/api/status` | Ollama status and model routing |
+| GET    | `/api/setup/status` | First-run wizard state (setup mode, port, recommended models) |
+| POST   | `/api/setup/probe` | Test an Ollama URL and report its version / model count |
+| POST   | `/api/setup/models` | List models installed on an Ollama URL |
+| POST   | `/api/setup/save` | Write `.env` and auto-restart with the new settings |
 | POST   | `/api/sessions` | Create an application (session) |
 | PATCH  | `/api/sessions/:id` | Rename an application / set its JD text |
 | DELETE | `/api/sessions/:id` | Delete an application |
@@ -178,7 +219,10 @@ server/            Express API, pipeline stages, LLM client
   prompts/         Prompt templates used by the local models
   pipeline/        Stage orchestrators (resume, jd, matching, questions, tailor, audit, ...)
   core/            Deterministic logic: claims validation, truth DB, retrieval, learning
-public/            Browser UI (vanilla JS, single page)
+public/            Browser UI (vanilla JS, single page) + first-run setup wizard
 scripts/           Smoke tests, unit tests, fixture generator
 data/sessions/     Local JSON persistence (gitignored)
+start.sh           One-click launcher (Linux / WSL)
+start-macos.sh     One-click launcher (macOS)
+start.ps1          One-click launcher (Windows / PowerShell)
 ```

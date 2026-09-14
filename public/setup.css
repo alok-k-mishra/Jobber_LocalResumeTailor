@@ -1,0 +1,202 @@
+/* First-run setup wizard ------------------------------------------------ */
+
+.setup-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 28px 20px 60px;
+}
+
+.setup-intro {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0 0 24px;
+}
+
+.setup-intro strong { color: var(--text); }
+
+.setup-intro a { color: var(--accent-2); }
+
+.setup-step {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  margin-bottom: 20px;
+}
+
+.setup-step h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  margin: 0 0 14px;
+}
+
+.step-no {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.step-body { padding-left: 34px; }
+
+.field-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.field { flex: 1 1 280px; display: block; }
+
+.field-label {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  letter-spacing: 0.3px;
+}
+
+.port-field { flex-basis: 160px; flex-grow: 0; }
+
+.connect-actions { margin-top: 14px; }
+
+/* URL help ---------------------------------------------------------------- */
+
+.url-info {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel-2);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.url-info p { margin: 0 0 6px; }
+.url-info p:last-child { margin-bottom: 0; }
+.url-info strong { color: var(--text); }
+
+.how-to-find { font-size: 12.5px; }
+.how-to-find .sep { opacity: 0.5; padding: 0 4px; }
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 1px 6px;
+  color: var(--accent-2);
+  font-size: 12.5px;
+}
+
+/* model type guidance ------------------------------------------------------ */
+
+.model-guide {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  background: var(--panel-2);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.model-guide div { margin-bottom: 6px; }
+.model-guide div:last-child { margin-bottom: 0; }
+.model-guide strong { color: var(--text); }
+.model-guide em { color: var(--accent-2); font-style: normal; }
+
+.model-guide .guide-note {
+  margin: 10px 0 0;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+  font-size: 12.5px;
+}
+.model-guide .guide-note strong { color: var(--accent-2); }
+
+.inline-status {
+  margin-top: 12px;
+  font-size: 13.5px;
+  min-height: 20px;
+}
+
+.inline-status.ok   { color: var(--good); }
+.inline-status.warn { color: var(--warn); }
+.inline-status.err  { color: var(--bad); }
+
+.inline-status .sub {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.hint { color: var(--muted); font-size: 13px; margin: 0 0 16px; }
+.hint code { color: var(--accent-2); background: var(--panel-2); padding: 1px 6px; border-radius: 5px; }
+
+/* role assignment rows -------------------------------------------------- */
+
+.role-row {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  background: var(--panel-2);
+}
+
+.role-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.role-title { font-size: 13.5px; font-weight: 700; }
+
+.role-title small {
+  display: block;
+  font-weight: 400;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.role-badge {
+  font-size: 11.5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.role-badge.ok { color: var(--good); border-color: rgba(74, 222, 128, 0.4); }
+.role-badge.missing { color: var(--warn); border-color: rgba(251, 191, 36, 0.4); }
+
+/* done card -------------------------------------------------------------- */
+
+.countdown {
+  display: inline-block;
+  min-width: 2ch;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 800;
+  color: var(--accent-2);
+}
+
+kbd {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  padding: 1px 7px;
+  font-size: 12.5px;
+}
