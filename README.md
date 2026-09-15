@@ -9,6 +9,12 @@ requirements, matches your real, verifiable experience against them, and rewrite
 your resume summary, bullets, and a custom cover letter — while enforcing
 anti-hallucination checks so every claim is backed by your actual resume.
 
+## Screenshots
+
+![Resume upload and JD input](https://alok-k-mishra.github.io/assets/1-COPq422c.png)
+![Requirement matching](https://alok-k-mishra.github.io/assets/2-B-1MaQzh.png)
+![Tailored output](https://alok-k-mishra.github.io/assets/3-LF4bBf0M.png)
+
 ## What it does
 
 1. **Resume Memory** — upload your master resume (PDF/DOCX/TXT) once. Qwen parses
